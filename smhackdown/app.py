@@ -1,23 +1,38 @@
 from flask import Flask
 from flask_restful import Resource, Api
+import dataset
+import random
+
+db = dataset.connect('postgresql://postgres:asdf@127.0.0.1:5432/smhackdown')
+
+
 
 app = Flask(__name__)
 api = Api(app)
 
-class Images(Resource):
+class Objects(Resource):
     def get(self):
-        return [
-            {},
-            {}
-        ]
+        objects = db['objects']
+
+        # FIXME: This doesn't order by number of likes
+        result = db.query('SELECT DISTINCT ON (institution) id, name, institution, image_url FROM objects ORDER BY institution, random()')
+        ret = list()
+        for row in result:
+            ret.append(row)
+        # Return random 2
+        return random.sample(ret, 2)
+
     def post(self):
-        return 
+        """
+        Save a like to the database
+        """
+        return {}
 
 class TopTen(Resource):
     def get(self):
         return []       
 
-api.add_resource(Images, '/images')
+api.add_resource(Objects, '/objects')
 api.add_resource(TopTen, '/topten')
 
 if __name__ == '__main__':
