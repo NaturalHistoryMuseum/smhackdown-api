@@ -8,3 +8,6 @@ CREATE TABLE likes (
 );
 
 PGPASSWORD=asdf /Applications/Postgres.app/Contents/Versions/9.6/bin/pg_dump -Fc --no-acl --no-owner -h localhost -U postgres smhackdown > smhackdown.dump
+
+
+heroku pg:backups:restore https://github.com/NaturalHistoryMuseum/smhackdown-api/blob/master/smhackdown/bin/smhackdown.dump?raw=true
