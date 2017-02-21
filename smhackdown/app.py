@@ -1,12 +1,10 @@
 from flask import Flask
+import os
 from flask_restful import Resource, Api
 import dataset
 import random
 
-db = dataset.connect('postgresql://postgres:asdf@127.0.0.1:5432/smhackdown')
-
-
-
+db = dataset.connect(os.environ['DATABASE_URL'])
 app = Flask(__name__)
 api = Api(app)
 

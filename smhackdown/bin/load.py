@@ -1,10 +1,11 @@
 
+import os
 import csv
 import dataset
 
 def main():
 
-    db = dataset.connect('postgresql://postgres:asdf@127.0.0.1:5432/smhackdown')
+    db = dataset.connect(os.environ['DATABASE_URL'])
 
     likes_table = db['likes']
     likes_table.delete()
