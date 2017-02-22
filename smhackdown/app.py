@@ -39,13 +39,39 @@ class Objects(Resource):
 
 class TopTen(Resource):
     def get(self):
-        result = db.query('select objects.*, (select count(*) from likes where likes.object_id = id) as count from objects order by count desc limit 10')
+        result = db.query('select objects.*, (select count(*) from likes where likes.object_id = id) as likes_count from objects order by likes_count desc limit 10')
         return list(result)
 
 class TopInstitutions(Resource):
     def get(self):
-        result = db.query('select institution, count(l.*) as count from objects o left join likes l on l.object_id = o.id group by institution order by count desc')
-        return list(result)
+        result = db.query('select institution as code, count(l.*) as likes_count from objects o left join likes l on l.object_id = o.id group by institution order by likes_count desc')
+        ret = list()
+
+        institution_info = {
+            'BM': {
+                'name': 'British Museum',
+                'logo': 'British_Museum_Logo.jpg'
+            },
+            'V&A': {
+                'name': 'Victoria & Albert Museum',
+                'logo': 'vanda.png'
+            },
+            'SM': {
+                'name': 'Science Museum',
+                'logo': 'ScienceMuseum.png'
+            },
+            'NHM': {
+                'name': 'Natural History Museum',
+                'logo': 'new-nhm-logo.gif'
+            }                 
+        }
+
+        for row in result:
+            # Merge in extra info
+            row.update(institution_info[row['code']])
+            ret.append(row)
+
+        return ret
 
 api.add_resource(Objects, '/objects')
 api.add_resource(TopTen, '/top-ten')
