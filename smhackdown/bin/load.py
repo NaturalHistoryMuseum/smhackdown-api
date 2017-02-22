@@ -18,6 +18,9 @@ def main():
     with open('./objects.csv', 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+
+            populated = True
+
             obj = {
                 'name': row['Object Name'],
                 'institution': row['Institution'],
@@ -25,13 +28,14 @@ def main():
                 'image_url': row['Image URL'],
                 'description': row['Description'],
             }
-            filtered = dict(filter(lambda item: item[1] is not '', obj.items()))
-            
-            if len(filtered) == len(obj):
-                objects_table.insert(obj)
-            
 
-              
+            for field in ['name', 'institution', 'object_url', 'image_url']:
+                if not obj.get(field, None):
+                    populated = False
+
+            if populated:                    
+                objects_table.insert(obj)
+
 
 if __name__ == "__main__":
     main()
