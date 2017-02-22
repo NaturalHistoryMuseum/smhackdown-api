@@ -23,6 +23,7 @@ def main():
                 'institution': row['Institution'],
                 'object_url': row['Permanent Object URL (item landing page)'],
                 'image_url': row['Image URL'],
+                'description': row['Description'],
             }
             filtered = dict(filter(lambda item: item[1] is not '', obj.items()))
             
