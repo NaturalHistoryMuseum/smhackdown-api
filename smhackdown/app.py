@@ -19,7 +19,7 @@ class Objects(Resource):
         objects = db['objects']
 
         # FIXME: This doesn't order by number of likes
-        result = db.query('SELECT DISTINCT ON (institution) id, name, institution, image_url FROM objects ORDER BY institution, random()')
+        result = db.query('SELECT DISTINCT ON (institution) id, name, institution, image_url, object_url FROM objects ORDER BY institution, random()')
         ret = list()
         for row in result:
             ret.append(row)
